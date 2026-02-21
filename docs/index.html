@@ -376,7 +376,6 @@
             </div>
             
             <button class="btn btn-primary" onclick="startGame()">🚀 Commencer la partie</button>
-            <button class="btn btn-secondary" onclick="startTestGame()" style="background: #9b59b6;">🧪 Mode Test (3 rounds)</button>
             <button class="btn" onclick="resetSettings()" style="background: #95a5a6; color: white;">Réinitialiser</button>
         </div>
         
@@ -479,13 +478,15 @@
         }
         
         function updateCategoryList() {
-            // Show all categories by default
+            // Show all categories by default, only 4 pre-selected
             const allCategories = getAllCategories();
             const container = document.getElementById('category-selector');
             
-            // Get currently selected from storage or default to all
+            // Default: only 4 categories selected
+            const defaultCategories = ['🐕 Animaux', '🍎 Aliments', '🎨 Couleurs', '🚗 Véhicules'];
+            
             if (selectedCategories.length === 0) {
-                selectedCategories = [...allCategories];
+                selectedCategories = [...defaultCategories];
             }
             
             // Build category list
