@@ -1,13 +1,13 @@
 # 🎴 Mini Bac - Jeu de Famille
 
-Jeu de cartes familial inspiré du Mini Bac, prévu pour jouer sur le trajet des vacances.
+Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en famille.
 
 ## 🚀 Fonctionnalités
 
 - ✅ Fonctionne **hors ligne** (PWA)
 - ✅ Installable sur **iOS et Android**
 - ✅ 2 à 10 joueurs
-- ✅ Mode **Fun** et **Apprentissage**
+- ✅ Catégories configurables
 - ✅ Timer configurable
 - ✅ Score par étoiles
 - ✅ Paramètres sauvegardés
@@ -29,13 +29,25 @@ Jeu de cartes familial inspiré du Mini Bac, prévu pour jouer sur le trajet des
 2. Une lettre et une catégorie sont affichées
 3. Les joueurs cherchent un mot correspondant
 4. Le maître du jeu valide en appuyant sur le nom du joueur
-5. Le premier à atteindre le nombre d'étoiles gagne !
+5. Le premier à atteindre le nombre d'étoiles défini gagne !
+
+## 🏷️ Catégories disponibles
+
+Animaux, Aliments, Couleurs, Véhicules, Métiers, Maison, Vêtements, Nature, Pays, Villes, Prénoms, Sports, Films, Musique, Émissions, Jouets...
 
 ## 🔧 Développé avec
 
 - HTML/CSS/JS (vanilla)
 - PWA (Service Worker)
 - GitHub Pages
+
+---
+
+## Credits
+
+**Développement** : Alfred (assistant IA OpenClaw)
+
+**Idée originale** : Eric
 
 ---
 
