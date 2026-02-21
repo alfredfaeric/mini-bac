@@ -479,30 +479,22 @@
         }
         
         function updateCategoryList() {
-            const diff = document.getElementById('difficulty-setting').value;
-            difficulty = diff;
-            const categories = getCategoriesForDifficulty(diff);
+            // Show all categories by default
+            const allCategories = getAllCategories();
             const container = document.getElementById('category-selector');
             
-            // Get previously selected categories
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-            const previouslySelected = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) previouslySelected.push(cb.value);
-            });
+            // Get currently selected from storage or default to all
+            if (selectedCategories.length === 0) {
+                selectedCategories = [...allCategories];
+            }
             
             // Build category list
-            container.innerHTML = categories.map(cat => `
+            container.innerHTML = allCategories.map(cat => `
                 <label style="display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid #eee;">
-                    <input type="checkbox" value="${cat}" ${previouslySelected.includes(cat) || selectedCategories.includes(cat) ? 'checked' : ''} onchange="updateSelectedCategories()" style="width: auto; margin-right: 0.5rem;">
+                    <input type="checkbox" value="${cat}" ${selectedCategories.includes(cat) ? 'checked' : ''} onchange="updateSelectedCategories()" style="width: auto; margin-right: 0.5rem;">
                     <span>${cat}</span>
                 </label>
             `).join('');
-            
-            // If nothing was previously selected, select all by default
-            if (previouslySelected.length === 0 && selectedCategories.length === 0) {
-                selectedCategories = [...categories];
-            }
         }
         
         function updateSelectedCategories() {
