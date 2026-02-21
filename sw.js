@@ -2,7 +2,8 @@ const CACHE_NAME = 'mini-bac-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icon.svg'
 ];
 
 // Install event
