@@ -524,7 +524,6 @@
                 document.getElementById('target-stars').value = targetStars;
                 document.getElementById('timer-setting').value = timerSetting;
                 document.getElementById('mode-learning').checked = modeLearning;
-                document.getElementById('difficulty-setting').value = difficulty;
             } else {
                 players = [
                     { id: 1, name: 'Papa' },
@@ -543,7 +542,7 @@
                 targetStars: parseInt(document.getElementById('target-stars').value),
                 timerSetting: parseInt(document.getElementById('timer-setting').value),
                 modeLearning: document.getElementById('mode-learning').checked,
-                difficulty: document.getElementById('difficulty-setting').value,
+                difficulty: 'normal',
                 selectedCategories: selectedCategories
             };
             localStorage.setItem('miniBacSettings', JSON.stringify(settings));
@@ -569,7 +568,6 @@
             document.getElementById('target-stars').value = 10;
             document.getElementById('timer-setting').value = 15;
             document.getElementById('mode-learning').checked = false;
-            document.getElementById('difficulty-setting').value = 'normal';
             
             updateCategoryList();
             renderPlayers();

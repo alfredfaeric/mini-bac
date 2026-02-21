@@ -16,3 +16,4 @@ docs/*
 !docs/manifest.json
 !docs/sw.js
 !docs/icon.svg
+!docs/*.png
