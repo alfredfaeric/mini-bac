@@ -2,7 +2,7 @@
   "name": "Mini Bac - Jeu de Famille",
   "short_name": "Mini Bac",
   "description": "Jeu de cartes familial inspiré du Mini Bac",
-  "start_url": "/",
+  "start_url": "/mini-bac/",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#FF6B6B",
