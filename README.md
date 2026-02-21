@@ -1,4 +1,4 @@
-# 🎴 Mini Bac - Jeu de Famille
+# 🎴 Mini Bac - Jouer en Famille
 
 Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en famille.
 
