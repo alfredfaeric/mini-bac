@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# But these files
+!index.html
+!manifest.json
+!sw.js
+!README.md
+!.gitignore
