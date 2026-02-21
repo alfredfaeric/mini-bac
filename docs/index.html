@@ -230,14 +230,14 @@
         }
         
         /* Mode & Difficulty */
-        .mode-options, .difficulty-options {
+        .mode-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
         
-        .mode-option, .difficulty-option {
+        .mode-option {
             padding: 0.8rem;
             border: 2px solid #ddd;
             border-radius: 12px;
@@ -246,7 +246,7 @@
             transition: all 0.3s;
         }
         
-        .mode-option.selected, .difficulty-option.selected {
+        .mode-option.selected {
             border-color: var(--primary);
             background: #FFF5F5;
         }
@@ -456,7 +456,6 @@
         let timeLeft = 15;
         let targetStars = 10;
         let timerSetting = 15;
-        let modeLearning = false;
         let usedCombinations = [];
         
         // Initialize
@@ -466,7 +465,6 @@
         });
         
         // Settings
-        let difficulty = 'normal';
         let selectedCategories = [];
         
         function getAllCategories() {
@@ -517,20 +515,16 @@
                 ];
                 targetStars = settings.targetStars || 10;
                 timerSetting = settings.timerSetting || 15;
-                modeLearning = settings.modeLearning || false;
-                difficulty = settings.difficulty || 'normal';
                 selectedCategories = settings.selectedCategories || [];
                 
                 document.getElementById('target-stars').value = targetStars;
                 document.getElementById('timer-setting').value = timerSetting;
-                document.getElementById('mode-learning').checked = modeLearning;
             } else {
                 players = [
                     { id: 1, name: 'Papa' },
                     { id: 2, name: 'Maman' },
                     { id: 3, name: 'Léa' }
                 ];
-                difficulty = 'normal';
                 selectedCategories = [];
             }
             updateCategoryList();
@@ -541,15 +535,11 @@
                 players,
                 targetStars: parseInt(document.getElementById('target-stars').value),
                 timerSetting: parseInt(document.getElementById('timer-setting').value),
-                modeLearning: document.getElementById('mode-learning').checked,
-                difficulty: 'normal',
                 selectedCategories: selectedCategories
             };
             localStorage.setItem('miniBacSettings', JSON.stringify(settings));
             targetStars = settings.targetStars;
             timerSetting = settings.timerSetting;
-            modeLearning = settings.modeLearning;
-            difficulty = settings.difficulty;
         }
         
         function resetSettings() {
@@ -561,13 +551,10 @@
             ];
             targetStars = 10;
             timerSetting = 15;
-            modeLearning = false;
-            difficulty = 'normal';
             selectedCategories = [];
             
             document.getElementById('target-stars').value = 10;
             document.getElementById('timer-setting').value = 15;
-            document.getElementById('mode-learning').checked = false;
             
             updateCategoryList();
             renderPlayers();
@@ -651,7 +638,7 @@
             
             // Get letter and category (use all letters for test)
             const letters = LETTERS.normal;
-            const categories = selectedCategories.length > 0 ? selectedCategories : getCategoriesForDifficulty(difficulty);
+            const categories = selectedCategories.length > 0 ? selectedCategories : getAllCategories();
             
             // Find unused combination
             let attempts = 0;
