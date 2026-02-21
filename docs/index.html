@@ -376,7 +376,8 @@
             </div>
             
             <button class="btn btn-primary" onclick="startGame()">🚀 Commencer la partie</button>
-            <button class="btn btn-secondary" onclick="resetSettings()">Réinitialiser</button>
+            <button class="btn btn-secondary" onclick="startTestGame()" style="background: #9b59b6;">🧪 Mode Test (3 rounds)</button>
+            <button class="btn" onclick="resetSettings()" style="background: #95a5a6; color: white;">Réinitialiser</button>
         </div>
         
         <!-- SCREEN: GAME -->
@@ -616,7 +617,12 @@
         }
         
         // Game Logic
+        let testMode = false;
+        let testRoundsRemaining = 0;
+        
         function startGame() {
+            testMode = false;
+            testRoundsRemaining = 0;
             saveSettings();
             
             // Reset scores
@@ -628,9 +634,32 @@
             nextRound();
         }
         
+        function startTestGame() {
+            testMode = true;
+            testRoundsRemaining = 3;
+            saveSettings();
+            
+            // Reset scores
+            scores = {};
+            players.forEach(p => scores[p.id] = 0);
+            usedCombinations = [];
+            
+            alert('🧪 Mode Test activé ! 3 tours pour tester.');
+            showScreen('screen-game');
+            nextRound();
+        }
+        
         function nextRound() {
-            // Get letter and category
-            const letters = LETTERS[difficulty] || LETTERS.normal;
+            // Check if test mode is over
+            if (testMode && testRoundsRemaining <= 0) {
+                alert('🧪 Test terminé ! Vérifie que tout fonctionne.');
+                testMode = false;
+                showSetup();
+                return;
+            }
+            
+            // Get letter and category (use all letters for test)
+            const letters = LETTERS.normal;
             const categories = selectedCategories.length > 0 ? selectedCategories : getCategoriesForDifficulty(difficulty);
             
             // Find unused combination
@@ -679,10 +708,20 @@
             scores[playerId]++;
             renderScores();
             
-            // Check winner
-            if (scores[playerId] >= targetStars) {
+            // Test mode: decrement rounds
+            if (testMode) {
+                testRoundsRemaining--;
+            }
+            
+            // Check winner (only in normal mode)
+            if (!testMode && scores[playerId] >= targetStars) {
                 stopTimer();
                 showWinner(playerId);
+            } else if (testMode && testRoundsRemaining <= 0) {
+                stopTimer();
+                alert('🧪 Test terminé ! 3 rounds effectués.');
+                testMode = false;
+                showSetup();
             } else {
                 nextRound();
             }
