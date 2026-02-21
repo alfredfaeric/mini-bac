@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎴 Mini Bac - Jeu de Famille</title>
+    <meta name="theme-color" content="#FF6B6B">
+    <meta name="description" content="Jeu de cartes familial inspiré du Mini Bac">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Mini Bac">
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #4ECDC4;
+            --dark: #2C3E50;
+            --light: #F7F9FC;
+            --star: #FFD93D;
+            --success: #6BCB77;
+            --danger: #FF6B6B;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* Game Screen */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+        
+        .player-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .player-name {
+            font-size: 0.8rem;
+            color: var(--dark);
+        }
+        
+        .stars {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+        
+        .star-filled { color: var(--star); }
+        .star-empty { color: #ddd; }
+        
+        .game-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .letter-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--primary);
+            background: #FFF5F5;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--primary);
+        }
+        
+        .category-display {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: bold;
+            padding: 1rem;
+            background: #F0FDFD;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin: 1rem 0;
+        }
+        
+        .timer.warning { color: #F39C12; }
+        .timer.danger { color: var(--danger); }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        /* Settings */
+        .player-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .player-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .player-item input {
+            flex: 1;
+            padding: 0.5rem;
+        }
+        
+        .player-item .remove-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        /* Mode & Difficulty */
+        .mode-options, .difficulty-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mode-option, .difficulty-option {
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mode-option.selected, .difficulty-option.selected {
+            border-color: var(--primary);
+            background: #FFF5F5;
+        }
+        
+        /* Winner */
+        .winner {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .winner-name {
+            font-size: 2.5rem;
+            color: var(--star);
+            margin: 1rem 0;
+        }
+        
+        /* Screens */
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 28px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 28px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        .toggle input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 Mini Bac</h1>
+        
+        <!-- SCREEN: SETUP -->
+        <div id="screen-setup" class="screen active">
+            <div class="card">
+                <h2>👥 Joueurs</h2>
+                <div class="player-list" id="player-list"></div>
+                <button class="btn btn-secondary" onclick="addPlayer()">+ Ajouter un joueur</button>
+            </div>
+            
+            <div class="card">
+                <h2>⚙️ Paramètres</h2>
+                
+                <div class="form-group">
+                    <label>⭐ Objectif (étoiles pour gagner)</label>
+                    <select id="target-stars">
+                        <option value="5">5 étoiles</option>
+                        <option value="10" selected>10 étoiles</option>
+                        <option value="15">15 étoiles</option>
+                        <option value="20">20 étoiles</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>⏱️ Timer</label>
+                    <select id="timer-setting">
+                        <option value="0">Sans timer</option>
+                        <option value="10">10 secondes</option>
+                        <option value="15" selected>15 secondes</option>
+                        <option value="30">30 secondes</option>
+                    </select>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>🎮 Mode Apprentissage</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="mode-learning">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="startGame()">🚀 Commencer la partie</button>
+            <button class="btn btn-secondary" onclick="resetSettings()">Réinitialiser</button>
+        </div>
+        
+        <!-- SCREEN: GAME -->
+        <div id="screen-game" class="screen">
+            <div class="game-header">
+                <div id="scores-display"></div>
+            </div>
+            
+            <div class="card game-card">
+                <div class="letter-display" id="letter-display">A</div>
+                <div class="category-display" id="category-display">🍎 Fruits</div>
+                
+                <div class="timer" id="timer-display">⏱️ 15</div>
+                
+                <p style="color: #666; margin-bottom: 1rem;">
+                    Qui a trouvé ?
+                </p>
+                
+                <div class="action-buttons" id="player-buttons"></div>
+                
+                <button class="btn btn-secondary" onclick="nextRound()" style="margin-top: 1rem;">
+                    ⏭️ Passer (personne n'a trouvé)
+                </button>
+            </div>
+            
+            <button class="btn" onclick="endGame()" style="background: var(--dark); color: white;">
+                🏁 Terminer la partie
+            </button>
+        </div>
+        
+        <!-- SCREEN: WINNER -->
+        <div id="screen-winner" class="screen">
+            <div class="card winner">
+                <h2>🎉 Gagné !</h2>
+                <div class="winner-name" id="winner-name">Léa</div>
+                <div class="stars" id="winner-stars">⭐⭐⭐⭐⭐</div>
+                <p>a atteint l'objectif !</p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="newGame()">🔄 Nouvelle partie</button>
+            <button class="btn btn-secondary" onclick="showSetup()">⚙️ Modifier les paramètres</button>
+        </div>
+    </div>
+    
+    <script>
+        // Game Data
+        const LETTERS = {
+            easy: ['A', 'B', 'C', 'D', 'E', 'P', 'S', 'T', 'M', 'R'],
+            normal: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+            hard: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+        };
+        
+        const CATEGORIES = {
+            easy: [
+                '🐕 Animaux', '🍎 Aliments', '🎨 Couleurs', '🚗 Véhicules',
+                '👷 Métiers', '🏠 Maison', '👕 Vêtements', '🌳 Nature'
+            ],
+            normal: [
+                '🐕 Animaux', '🍎 Aliments', '🎨 Couleurs', '🚗 Véhicules',
+                '👷 Métiers', '🏠 Maison', '👕 Vêtements', '🌳 Nature',
+                '🇫🇷 Pays', '🏙️ Villes', '👨 Prénoms', '🍽️ Aliment'
+            ],
+            hard: [
+                '🐕 Animaux', '🍎 Aliments', '🎨 Couleurs', '🚗 Véhicules',
+                '👷 Métiers', '🏠 Maison', '👕 Vêtements', '🌳 Nature',
+                '🇫🇷 Pays', '🏙️ Villes', '👨 Prénoms', '⚽ Sports',
+                '🎬 Films', '🎵 Musique', '📺 Emissions', '🧸 Jouets'
+            ]
+        };
+        
+        // Game State
+        let players = [];
+        let scores = {};
+        let currentLetter = '';
+        let currentCategory = '';
+        let timer = null;
+        let timeLeft = 15;
+        let targetStars = 10;
+        let timerSetting = 15;
+        let modeLearning = false;
+        let usedCombinations = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            renderPlayers();
+        });
+        
+        // Settings
+        function loadSettings() {
+            const saved = localStorage.getItem('miniBacSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                players = settings.players || [
+                    { id: 1, name: 'Papa' },
+                    { id: 2, name: 'Maman' },
+                    { id: 3, name: 'Léa' }
+                ];
+                targetStars = settings.targetStars || 10;
+                timerSetting = settings.timerSetting || 15;
+                modeLearning = settings.modeLearning || false;
+                
+                document.getElementById('target-stars').value = targetStars;
+                document.getElementById('timer-setting').value = timerSetting;
+                document.getElementById('mode-learning').checked = modeLearning;
+            } else {
+                players = [
+                    { id: 1, name: 'Papa' },
+                    { id: 2, name: 'Maman' },
+                    { id: 3, name: 'Léa' }
+                ];
+            }
+        }
+        
+        function saveSettings() {
+            const settings = {
+                players,
+                targetStars: parseInt(document.getElementById('target-stars').value),
+                timerSetting: parseInt(document.getElementById('timer-setting').value),
+                modeLearning: document.getElementById('mode-learning').checked
+            };
+            localStorage.setItem('miniBacSettings', JSON.stringify(settings));
+            targetStars = settings.targetStars;
+            timerSetting = settings.timerSetting;
+            modeLearning = settings.modeLearning;
+        }
+        
+        function resetSettings() {
+            localStorage.removeItem('miniBacSettings');
+            players = [
+                { id: 1, name: 'Papa' },
+                { id: 2, name: 'Maman' },
+                { id: 3, name: 'Léa' }
+            ];
+            targetStars = 10;
+            timerSetting = 15;
+            modeLearning = false;
+            
+            document.getElementById('target-stars').value = 10;
+            document.getElementById('timer-setting').value = 15;
+            document.getElementById('mode-learning').checked = false;
+            
+            renderPlayers();
+            localStorage.removeItem('miniBacSettings');
+        }
+        
+        // Players
+        function renderPlayers() {
+            const list = document.getElementById('player-list');
+            list.innerHTML = players.map((p, idx) => `
+                <div class="player-item">
+                    <span>${idx + 1}.</span>
+                    <input type="text" value="${p.name}" onchange="updatePlayerName(${p.id}, this.value)" placeholder="Nom du joueur">
+                    ${players.length > 2 ? `<button class="remove-btn" onclick="removePlayer(${p.id})">×</button>` : ''}
+                </div>
+            `).join('');
+            
+            // Update score display
+            scores = {};
+            players.forEach(p => scores[p.id] = 0);
+        }
+        
+        function addPlayer() {
+            if (players.length >= 10) return;
+            const newId = Math.max(...players.map(p => p.id)) + 1;
+            players.push({ id: newId, name: `Joueur ${newId}` });
+            renderPlayers();
+        }
+        
+        function removePlayer(id) {
+            if (players.length <= 2) return;
+            players = players.filter(p => p.id !== id);
+            renderPlayers();
+        }
+        
+        function updatePlayerName(id, name) {
+            const player = players.find(p => p.id === id);
+            if (player) player.name = name;
+        }
+        
+        // Game Logic
+        function startGame() {
+            saveSettings();
+            
+            // Reset scores
+            scores = {};
+            players.forEach(p => scores[p.id] = 0);
+            usedCombinations = [];
+            
+            showScreen('screen-game');
+            nextRound();
+        }
+        
+        function nextRound() {
+            // Get letter and category
+            const letters = LETTERS.normal;
+            const categories = CATEGORIES.normal;
+            
+            // Find unused combination
+            let attempts = 0;
+            do {
+                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+                currentCategory = categories[Math.floor(Math.random() * categories.length)];
+                attempts++;
+            } while (usedCombinations.includes(currentLetter + currentCategory) && attempts < 50);
+            
+            if (attempts >= 50) {
+                usedCombinations = [];
+            }
+            usedCombinations.push(currentLetter + currentCategory);
+            
+            // Update display
+            document.getElementById('letter-display').textContent = currentLetter;
+            document.getElementById('category-display').textContent = currentCategory;
+            
+            // Render player buttons
+            const buttonsContainer = document.getElementById('player-buttons');
+            buttonsContainer.innerHTML = players.map(p => `
+                <button class="btn btn-success" onclick="addPoint(${p.id})">
+                    ⭐ ${p.name}
+                </button>
+            `).join('');
+            
+            // Render scores
+            renderScores();
+            
+            // Timer
+            startTimer();
+        }
+        
+        function renderScores() {
+            const container = document.getElementById('scores-display');
+            container.innerHTML = players.map(p => `
+                <div class="player-score">
+                    <span class="player-name">${p.name}</span>
+                    <span class="stars">${'⭐'.repeat(scores[p.id])}${'☆'.repeat(targetStars - scores[p.id])}</span>
+                </div>
+            `).join('');
+        }
+        
+        function addPoint(playerId) {
+            scores[playerId]++;
+            renderScores();
+            
+            // Check winner
+            if (scores[playerId] >= targetStars) {
+                stopTimer();
+                showWinner(playerId);
+            } else {
+                nextRound();
+            }
+        }
+        
+        function startTimer() {
+            stopTimer();
+            
+            if (timerSetting === 0) {
+                document.getElementById('timer-display').textContent = '⏱️ ∞';
+                return;
+            }
+            
+            timeLeft = timerSetting;
+            updateTimerDisplay();
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    stopTimer();
+                }
+            }, 1000);
+        }
+        
+        function stopTimer() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+        
+        function updateTimerDisplay() {
+            const display = document.getElementById('timer-display');
+            display.textContent = `⏱️ ${timeLeft}`;
+            display.className = 'timer';
+            
+            if (timeLeft <= 5 && timeLeft > 0) {
+                display.classList.add('danger');
+            } else if (timeLeft <= 10) {
+                display.classList.add('warning');
+            }
+        }
+        
+        function showWinner(playerId) {
+            const player = players.find(p => p.id === playerId);
+            document.getElementById('winner-name').textContent = player.name;
+            document.getElementById('winner-stars').textContent = '⭐'.repeat(targetStars);
+            showScreen('screen-winner');
+        }
+        
+        function endGame() {
+            stopTimer();
+            // Find max score
+            let maxScore = 0;
+            let winnerId = null;
+            players.forEach(p => {
+                if (scores[p.id] > maxScore) {
+                    maxScore = scores[p.id];
+                    winnerId = p.id;
+                }
+            });
+            
+            if (winnerId) {
+                showWinner(winnerId);
+            } else {
+                showSetup();
+            }
+        }
+        
+        function newGame() {
+            scores = {};
+            players.forEach(p => scores[p.id] = 0);
+            usedCombinations = [];
+            showScreen('screen-game');
+            nextRound();
+        }
+        
+        function showSetup() {
+            stopTimer();
+            showScreen('screen-setup');
+        }
+        
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+        
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('SW registered'))
+                .catch(err => console.log('SW failed', err));
+        }
+    </script>
+</body>
+</html>

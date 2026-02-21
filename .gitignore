@@ -1,9 +1,18 @@
 # Ignore everything
 *
 
-# But these files
+# But include these
 !index.html
 !manifest.json
 !sw.js
 !README.md
 !.gitignore
+
+# Include docs folder
+!docs/
+docs/*
+!docs/.nojekyll
+!docs/index.html
+!docs/manifest.json
+!docs/sw.js
+!docs/icon.svg
