@@ -67,6 +67,9 @@ curl -sL https://alfredfaeric.github.io/mini-bac/ | grep -c "Animaux"
 
 # 6. Vérifier PWA installable (iOS)
 curl -sL https://alfredfaeric.github.io/mini-bac/manifest.json | grep -o "start_url"
+
+# 7. Vérifier que le jeu se lance (pas d'erreur JS)
+curl -sL https://alfredfaeric.github.io/mini-bac/ | grep -c "mode-learning. checked" || echo "OK: Pas de référence mode-learning"
 ```
 
 ---
