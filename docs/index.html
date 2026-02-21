@@ -358,6 +358,21 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label>🎯 Niveau de difficulté</label>
+                    <select id="difficulty-setting" onchange="updateCategoryList()">
+                        <option value="easy">Facile</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="hard">Difficile</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>🏷️ Catégories</label>
+                    <div id="category-selector" style="max-height: 200px; overflow-y: auto; border: 2px solid #ddd; border-radius: 12px; padding: 0.5rem;">
+                    </div>
+                </div>
+                
                 <div class="toggle-container">
                     <span>🎮 Mode Apprentissage</span>
                     <label class="toggle">
@@ -458,6 +473,52 @@
         });
         
         // Settings
+        let difficulty = 'normal';
+        let selectedCategories = [];
+        
+        function getAllCategories() {
+            return [...new Set([...CATEGORIES.easy, ...CATEGORIES.normal, ...CATEGORIES.hard])];
+        }
+        
+        function getCategoriesForDifficulty(diff) {
+            return CATEGORIES[diff] || CATEGORIES.normal;
+        }
+        
+        function updateCategoryList() {
+            const diff = document.getElementById('difficulty-setting').value;
+            difficulty = diff;
+            const categories = getCategoriesForDifficulty(diff);
+            const container = document.getElementById('category-selector');
+            
+            // Get previously selected categories
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            const previouslySelected = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) previouslySelected.push(cb.value);
+            });
+            
+            // Build category list
+            container.innerHTML = categories.map(cat => `
+                <label style="display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid #eee;">
+                    <input type="checkbox" value="${cat}" ${previouslySelected.includes(cat) || selectedCategories.includes(cat) ? 'checked' : ''} onchange="updateSelectedCategories()" style="width: auto; margin-right: 0.5rem;">
+                    <span>${cat}</span>
+                </label>
+            `).join('');
+            
+            // If nothing was previously selected, select all by default
+            if (previouslySelected.length === 0 && selectedCategories.length === 0) {
+                selectedCategories = [...categories];
+            }
+        }
+        
+        function updateSelectedCategories() {
+            const checkboxes = document.querySelectorAll('#category-selector input[type="checkbox"]');
+            selectedCategories = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selectedCategories.push(cb.value);
+            });
+        }
+        
         function loadSettings() {
             const saved = localStorage.getItem('miniBacSettings');
             if (saved) {
@@ -470,17 +531,23 @@
                 targetStars = settings.targetStars || 10;
                 timerSetting = settings.timerSetting || 15;
                 modeLearning = settings.modeLearning || false;
+                difficulty = settings.difficulty || 'normal';
+                selectedCategories = settings.selectedCategories || [];
                 
                 document.getElementById('target-stars').value = targetStars;
                 document.getElementById('timer-setting').value = timerSetting;
                 document.getElementById('mode-learning').checked = modeLearning;
+                document.getElementById('difficulty-setting').value = difficulty;
             } else {
                 players = [
                     { id: 1, name: 'Papa' },
                     { id: 2, name: 'Maman' },
                     { id: 3, name: 'Léa' }
                 ];
+                difficulty = 'normal';
+                selectedCategories = [];
             }
+            updateCategoryList();
         }
         
         function saveSettings() {
@@ -488,12 +555,15 @@
                 players,
                 targetStars: parseInt(document.getElementById('target-stars').value),
                 timerSetting: parseInt(document.getElementById('timer-setting').value),
-                modeLearning: document.getElementById('mode-learning').checked
+                modeLearning: document.getElementById('mode-learning').checked,
+                difficulty: document.getElementById('difficulty-setting').value,
+                selectedCategories: selectedCategories
             };
             localStorage.setItem('miniBacSettings', JSON.stringify(settings));
             targetStars = settings.targetStars;
             timerSetting = settings.timerSetting;
             modeLearning = settings.modeLearning;
+            difficulty = settings.difficulty;
         }
         
         function resetSettings() {
@@ -506,13 +576,16 @@
             targetStars = 10;
             timerSetting = 15;
             modeLearning = false;
+            difficulty = 'normal';
+            selectedCategories = [];
             
             document.getElementById('target-stars').value = 10;
             document.getElementById('timer-setting').value = 15;
             document.getElementById('mode-learning').checked = false;
+            document.getElementById('difficulty-setting').value = 'normal';
             
+            updateCategoryList();
             renderPlayers();
-            localStorage.removeItem('miniBacSettings');
         }
         
         // Players
@@ -564,8 +637,8 @@
         
         function nextRound() {
             // Get letter and category
-            const letters = LETTERS.normal;
-            const categories = CATEGORIES.normal;
+            const letters = LETTERS[difficulty] || LETTERS.normal;
+            const categories = selectedCategories.length > 0 ? selectedCategories : getCategoriesForDifficulty(difficulty);
             
             // Find unused combination
             let attempts = 0;
