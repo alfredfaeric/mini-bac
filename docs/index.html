@@ -410,6 +410,29 @@
             height: 1px;
             background: var(--gray-light);
         }
+        
+        /* Install button - only shown in browser */
+        .install-prompt {
+            display: none;
+            background: var(--gray-light);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .install-prompt.show {
+            display: block;
+        }
+        
+        .install-prompt p {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .install-prompt strong {
+            color: var(--dark);
+        }
     </style>
 </head>
 <body>
@@ -417,6 +440,11 @@
         <header>
             <h1>Mini Bac</h1>
         </header>
+        
+        <div class="install-prompt" id="install-prompt">
+            <p><strong>Pour installer l'app :</strong><br>
+            Appuyez sur <strong>Partager</strong> puis <strong>"Ajouter à l'écran d'accueil"</strong></p>
+        </div>
         
         <!-- SCREEN: SETUP -->
         <div id="screen-setup" class="screen active">
@@ -542,7 +570,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadSettings();
             renderPlayers();
+            checkInstallPrompt();
         });
+        
+        function checkInstallPrompt() {
+            // Check if running in standalone mode (PWA installed)
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                || window.navigator.standalone 
+                || document.referrer.includes('android-app://');
+            
+            const installPrompt = document.getElementById('install-prompt');
+            if (!isStandalone) {
+                installPrompt.classList.add('show');
+            }
+        }
         
         function getAllCategories() {
             return [...new Set([...CATEGORIES.easy, ...CATEGORIES.normal, ...CATEGORIES.hard])];
