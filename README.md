@@ -1,8 +1,16 @@
-# 🎴 Mini Bac - Jeu de Famille
+<img src="docs/icon-512.png" alt="Mini Bac Icon" width="128" height="128">
+
+# Mini Bac - Jeu de Famille
 
 Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en famille.
 
-![Mini Bac](docs/screenshot.png)
+## 📱 Screenshots
+
+### Écran de configuration
+<img src="docs/screenshot-setup.png" alt="Écran de configuration" width="300">
+
+### Écran de jeu
+<img src="docs/screenshot-game.png" alt="Écran de jeu" width="300">
 
 ## 🚀 Fonctionnalités
 
@@ -13,6 +21,7 @@ Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en
 - ✅ Timer configurable
 - ✅ Score par étoiles
 - ✅ Paramètres sauvegardés
+- ✅ Design moderne et minimaliste
 
 ## 📱 Installation
 
@@ -23,7 +32,8 @@ Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en
 
 ### Android (Chrome)
 1. Ouvrir le site
-2. Appuyer sur "Installer"
+2. Appuyer sur "Installer" ou les 3 points
+3. Ajouter à l'écran d'accueil
 
 ## 🎮 Règles du jeu
 
@@ -61,16 +71,13 @@ curl -sL https://alfredfaeric.github.io/mini-bac/manifest.json | grep -o "Mini B
 
 # 4. Vérifier le service worker
 curl -sI https://alfredfaeric.github.io/mini-bac/sw.js | head -1
-
-# 5. Vérifier les catégories (au moins 4)
-curl -sL https://alfredfaeric.github.io/mini-bac/ | grep -c "Animaux"
-
-# 6. Vérifier PWA installable (iOS)
-curl -sL https://alfredfaeric.github.io/mini-bac/manifest.json | grep -o "start_url"
-
-# 7. Vérifier que le jeu se lance (pas d'erreur JS)
-curl -sL https://alfredfaeric.github.io/mini-bac/ | grep -c "mode-learning. checked" || echo "OK: Pas de référence mode-learning"
 ```
+
+---
+
+## 📄 License
+
+MIT
 
 ---
 
