@@ -1,4 +1,4 @@
-<img src="docs/icon-512.png" alt="Mini Bac Icon" width="128" height="128">
+<img src="icon-512.png" alt="Mini Bac Icon" width="128" height="128">
 
 # Mini Bac - Jeu de Famille
 
@@ -7,10 +7,10 @@ Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en
 ## 📱 Screenshots
 
 ### Écran de configuration
-<img src="docs/screenshot-setup.png" alt="Écran de configuration" width="300">
+<img src="screenshot-setup.png" alt="Écran de configuration" width="300">
 
 ### Écran de jeu
-<img src="docs/screenshot-game.png" alt="Écran de jeu" width="300">
+<img src="screenshot-game.png" alt="Écran de jeu" width="300">
 
 ## 🚀 Fonctionnalités
 
