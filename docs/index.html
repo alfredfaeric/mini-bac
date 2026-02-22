@@ -310,20 +310,15 @@
         .timer.danger { color: var(--danger); }
         
         .action-buttons {
-            text-align: center;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
             margin-top: 1rem;
         }
         
         .action-buttons .btn {
             padding: 0.875rem;
             font-size: 0.9rem;
-            width: calc(50% - 0.375rem);
-            margin: 0 0.1875rem 0.75rem 0.1875rem;
-            display: inline-block;
-        }
-        
-        .action-buttons.single-btn .btn {
-            width: 200px;
         }
         
         /* Category selector */
@@ -780,13 +775,6 @@
                     ${p.name}
                 </button>
             `).join('');
-            
-            // Center single button
-            if (players.length === 1) {
-                buttonsContainer.classList.add('single-btn');
-            } else {
-                buttonsContainer.classList.remove('single-btn');
-            }
             
             renderScores();
             startTimer();
