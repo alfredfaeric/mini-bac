@@ -7,13 +7,12 @@
 !sw.js
 !README.md
 !.gitignore
+!.nojekyll
 
-# Include docs folder
-!docs/
-docs/*
-!docs/.nojekyll
-!docs/index.html
-!docs/manifest.json
-!docs/sw.js
-!docs/icon.svg
-!docs/*.png
+# Include icons and screenshots
+!icon.svg
+!icon-192.png
+!icon-512.png
+!screenshot.png
+!screenshot-setup.png
+!screenshot-game.png
