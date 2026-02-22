@@ -1,6 +1,8 @@
 <img src="icon-512.png" alt="Mini Bac Icon" width="128" height="128">
 
-# Mini Bac - Jeu de Famille
+# 🎮 Mini Bac - Jeu de Famille
+
+[**Jouer maintenant →**](https://alfredfaeric.github.io/mini-bac/)
 
 Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en famille.
 
