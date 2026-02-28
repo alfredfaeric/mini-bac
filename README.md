@@ -4,7 +4,7 @@
 
 [**Jouer maintenant →**](https://alfredfaeric.github.io/mini-bac/)
 
-Jeu de rapidité et de vocabulaire inspiré du "Petit Bac", prévu pour jouer en famille.
+Jeu de rapidité et de vocabulaire pour jouer en famille.
 
 ## 📱 Screenshots
 
