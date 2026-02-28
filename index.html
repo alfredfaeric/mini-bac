@@ -518,6 +518,11 @@
                 <p style="color: var(--gray);">a atteint l'objectif !</p>
             </div>
             
+            <div class="card" style="margin-top: 1rem;">
+                <div class="section-title">Classement</div>
+                <div id="scores-ranking" style="text-align: center;"></div>
+            </div>
+            
             <button class="btn btn-primary" onclick="newGame()">Nouvelle partie</button>
             <button class="btn btn-secondary" onclick="showSetup()">Modifier</button>
         </div>
@@ -859,6 +864,19 @@
             const player = players.find(p => p.id === playerId);
             document.getElementById('winner-name').textContent = player.name;
             document.getElementById('winner-stars').textContent = '⭐'.repeat(targetStars);
+            
+            // Afficher le classement de tous les joueurs
+            const rankingDiv = document.getElementById('scores-ranking');
+            const sortedPlayers = [...players].sort((a, b) => (scores[b.id] || 0) - (scores[a.id] || 0));
+            rankingDiv.innerHTML = sortedPlayers.map((p, index) => {
+                const score = scores[p.id] || 0;
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                return `<div style="padding: 0.5rem; border-bottom: 1px solid var(--gray-light); display: flex; justify-content: space-between; align-items: center;">
+                    <span>${medal} <strong>${p.name}</strong></span>
+                    <span>${'⭐'.repeat(score)} (${score})</span>
+                </div>`;
+            }).join('');
+            
             showScreen('screen-winner');
         }
         
